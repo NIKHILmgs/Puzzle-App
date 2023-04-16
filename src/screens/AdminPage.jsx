@@ -9,6 +9,7 @@ const AdminPage = () => {
   const navigate = useNavigate();
 
   let isAdmin = JSON.parse(localStorage.getItem("isAdmin"));
+  let adminPass = JSON.parse(localStorage.getItem("adminPass"));
 
   const [usersDetails, setUsersDetails] = useState([]);
 
@@ -17,7 +18,7 @@ const AdminPage = () => {
   const getUsers = async () => {
     const res = await axios
       .get(`${BaseUrl}/auth/users`, {
-        headers: { adminPass: state?.adminPass },
+        headers: { adminPass },
       })
       .catch((err) => {
         return alert(err.response.data.message);
@@ -29,7 +30,7 @@ const AdminPage = () => {
   console.log(usersDetails);
 
   useEffect(() => {
-    getUsers();
+    if (isAdmin) getUsers();
   }, []);
 
   useEffect(() => {
@@ -46,7 +47,8 @@ const AdminPage = () => {
           <p
             onClick={() => {
               localStorage.removeItem("isAdmin");
-              return navigate("/login");
+              localStorage.removeItem("adminPass");
+              window.location.reload();
             }}
           >
             Logout
@@ -87,7 +89,7 @@ const AdminPage = () => {
 
             <div className="hintUsed">
               <p className="dashpara">
-                {user.puzzleProgress.result.toUpperCase()}
+                {user.puzzleProgress.result?.toUpperCase()}
               </p>
             </div>
             <div className="hintUsed">

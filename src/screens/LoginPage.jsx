@@ -52,6 +52,8 @@ const LoginPage = () => {
       console.log(res.data);
       if (res.data.access && res.data.access === "admin_access") {
         localStorage.setItem("isAdmin", JSON.stringify(true));
+        localStorage.setItem("adminPass", JSON.stringify(pass));
+        // console.log(pass);
         return navigate("/dashboard", { state: { adminPass: pass } });
       }
       setToken(res.data.token);
